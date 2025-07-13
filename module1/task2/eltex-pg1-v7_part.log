@@ -1,0 +1,30 @@
+ls
+compgen -v HIST
+echo -v $HISTSIZE
+ls .
+export HISTTIMEFORMAT='%F %T '
+date
+hash
+history
+tail -n 5 ~/.bash_history
+export PROMPT_COMMAND='history -a'
+ls
+tail ~/.bash_history
+hash
+DATE=$(date +%Y-%m-%d)
+echo $DATE
+TIME=$(date +%H:%M:%S)
+echo $TIME
+DATE_TIME="$(date '+%Y-%m-%d %H:%M:%S')"
+echo $DATE_TIME
+cd /bin
+ls *[0-9]*
+cd ..
+cd /sbin
+ls *[0-9]*
+PS1='\u@\h-$(date +%H:%M)>'
+PS1='\u@\h-$(date +%H:%M)> '
+echo "PS1='\u@\h-$(date +%H:%M)> '" >> ~/.bashrc
+bash
+mkdir -p ~/"$(date +%Y)"-{01..12}
+ls -l
