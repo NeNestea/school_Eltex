@@ -1,0 +1,109 @@
+1. Установите параметры git в соответствии с вашими учетными данными:
+git config --global user.name NeNestea
+git config --global user.email clove3844@gmail.com
+git config --global init.defaultBranch main
+
+2. Установите непосредственно программу git и набор утилит для управления github из командной строки gh:
+apt update
+apt install git gh
+
+3. Создайте ключ ssh:
+ssh-keygen -t ed25519 -f ~/.ssh/NeNestea
+Generating public/private ed25519 key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/NeNestea
+Your public key has been saved in /root/.ssh/NeNestea.pub
+The key fingerprint is:
+SHA256:YR1Dm2gQMg5ggN8ytzn5wmLE0ye7eFXcCLJJAt9XHlc root@eltex-practice2-pg1-v7
+The key's randomart image is:
++--[ED25519 256]--+
+|*+. o o.o.=.E    |
+|o..+oo.+ = =     |
+| ..+o+.o*o+      |
+|  + =. o+..      |
+| . = + .S        |
+|  + B o          |
+| . o B           |
+|  o.= .          |
+| ..o.o           |
++----[SHA256]-----+
+
+4. Подключите этот комьютер к github:
+gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations on this host? SSH
+? Upload your SSH public key to your GitHub account? /root/.ssh/NeNestea.pub
+? Title for your SSH key: eltex-practice2-pg1-v7
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+5. Укажите автоматическую авторизацию только для сайта github.com:
+gh auth setup-git --hostname github.com
+Убедиться, что все в порядке можно командой: gh auth status
+
+github.com
+  ✓ Logged in to github.com account NeNestea (/root/.config/gh/hosts.yml)
+  - Active account: true
+  - Git operations protocol: ssh
+  - Token: gho_************************************
+  - Token scopes: 'admin:public_key', 'gist', 'read:org', 'repo'
+
+6. Создайте репозиторий на сервере github.
+gh repo create --public school_Eltex
+✓ Created repository NeNestea/school_Eltex on GitHub
+  https://github.com/NeNestea/school_Eltex
+
+7. Пора наполнить его.
+root@eltex-practice2-pg1-v7:~# mkdir ~/school_Eltex && cd ~/school_Eltex
+root@eltex-practice2-pg1-v7:~/school_Eltex# echo "#my_practice_on_school_Eltex" >> README.md
+root@eltex-practice2-pg1-v7:~/school_Eltex# git init
+Initialized empty Git repository in /root/school_Eltex/.git/
+root@eltex-practice2-pg1-v7:~/school_Eltex# git add README.md
+root@eltex-practice2-pg1-v7:~/school_Eltex# git commit -m "first commit"
+[main (root-commit) dfe58d3] first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+root@eltex-practice2-pg1-v7:~/school_Eltex# git branch -M main
+root@eltex-practice2-pg1-v7:~/school_Eltex# git remote add origin https://github.com/NeNestea/school_Eltex.git
+root@eltex-practice2-pg1-v7:~/school_Eltex# git status
+On branch main
+nothing to commit, working tree clean
+root@eltex-practice2-pg1-v7:~/school_Eltex# git push -u origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 238 bytes | 238.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/NeNestea/school_Eltex.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+root@eltex-practice2-pg1-v7:~/school_Eltex# mkdir -p module1/task1
+root@eltex-practice2-pg1-v7:~/school_Eltex# mkdir module1/task2
+root@eltex-practice2-pg1-v7:~/school_Eltex# mkdir module1/task3
+
+root@eltex-practice2-pg1-v7:~/school_Eltex# git add .
+root@eltex-practice2-pg1-v7:~/school_Eltex# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   module1/task2/eltex-pg1-v7_part.log
+        new file:   module1/task3/eltex-pg1-v7_part3.log
+
+root@eltex-practice2-pg1-v7:~/school_Eltex# git commit -m "practice1"
+[main 35390d5] practice1
+ 2 files changed, 48 insertions(+)
+ create mode 100644 module1/task2/eltex-pg1-v7_part.log
+ create mode 100644 module1/task3/eltex-pg1-v7_part3.log
+root@eltex-practice2-pg1-v7:~/school_Eltex# git push
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (7/7), 968 bytes | 968.00 KiB/s, done.
+Total 7 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/NeNestea/school_Eltex.git
+   dfe58d3..35390d5  main -> main
+
+
+

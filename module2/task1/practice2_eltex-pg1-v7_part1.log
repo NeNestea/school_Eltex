@@ -1,0 +1,210 @@
+1. Создайте на сервере для 1 практики ключ ssh.
+ssh-keygen
+
+2. Скопируйте созданный ключ на сервер для 2 практики для пользователя root при помощи программы ssh-copy-id. Подключитесь к серверу для 2 практики под пользователем root и сравните содержимое файла открытого ключа на сервере 1 ~/.ssh/*.pub и файла ~/.ssh/authorized_keys на сервере для 2 практики, а так же права доступа для каждого из файлов.
+
+Копируем ключ для пользователя root:
+ ssh-copy-id -i .ssh/id_rsa.pub root@172.16.9.181
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: ".ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@172.16.9.181's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'root@172.16.9.181'"
+and check to make sure that only the key(s) you wanted were added.
+
+Содержимое файла на сервере 1:
+cat ~/.ssh/*.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCsDvT21Mkw9ZNW91bws5lV5iXazTnCUyonMSLxgEGcTYA6Mc+sM9R4cnEwzkA1DZiFmAArhI44WJZAIj1nKhcpdkVms4a6Yz5pze8Hj5fqTH2qaVRvR/xpfNh7YD0IsBU/AB2jrJiY0/07noe8+dIkwRR3Y7y2wJHbeQ3BZIPCB5dX7aFCKcQXFlV7MPucZC8vY0V6hsFZ6p3Q5JDYu72iJEuHQHHVfCKclvaqvRUYzd7mryf1059yvA/r/NMkoyLy/c4I7jWsH67usEoR8nfpkXuIXY5sF3A+URa8KHdjp6w8+rRRck9RUrwZCe+/aGC7Nn0MAK1yCYoezrR1Xm62xYtoF9kHoiUtrrujTAaZbb1RXdFMXSPIgD+SSZ1IE6qzlY+V/NSMgz4E+sfm9bmLmGmxUO+Uyrp08p70axKOyyBDze3hXqxySmiTh4j9yQmOqCKuaU1Zuv+Ky6oTtv/rYMiF/XWFAqOUCpn2u6+r7sUSBqyrUWC2Z3UPEfaZSIU= eltex-pg1-v7@eltex-2025-summer
+
+Содержимое файла на сервере 2:
+ cat ~/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCsDvT21Mkw9ZNW91bws5lV5iXazTnCUyonMSLxgEGcTYA6Mc+sM9R4cnEwzkA1DZiFmAArhI44WJZAIj1nKhcpdkVms4a6Yz5pze8Hj5fqTH2qaVRvR/xpfNh7YD0IsBU/AB2jrJiY0/07noe8+dIkwRR3Y7y2wJHbeQ3BZIPCB5dX7aFCKcQXFlV7MPucZC8vY0V6hsFZ6p3Q5JDYu72iJEuHQHHVfCKclvaqvRUYzd7mryf1059yvA/r/NMkoyLy/c4I7jWsH67usEoR8nfpkXuIXY5sF3A+URa8KHdjp6w8+rRRck9RUrwZCe+/aGC7Nn0MAK1yCYoezrR1Xm62xYtoF9kHoiUtrrujTAaZbb1RXdFMXSPIgD+SSZ1IE6qzlY+V/NSMgz4E+sfm9bmLmGmxUO+Uyrp08p70axKOyyBDze3hXqxySmiTh4j9yQmOqCKuaU1Zuv+Ky6oTtv/rYMiF/XWFAqOUCpn2u6+r7sUSBqyrUWC2Z3UPEfaZSIU= eltex-pg1-v7@eltex-2025-summer
+
+Они одинаковые.
+
+Проверяем права доступа для каждого файла:
+ls -l ~/.ssh/*.pub
+-rw-r--r-- 1 root root 109 Jul 11 03:22 /root/.ssh/id_ed25519.pub
+
+ ls -l ~/.ssh/authorized_keys
+-rw------- 1 root root 584 Jul 11 03:31 /root/.ssh/authorized_keys
+
+3. Создайте пользователя user1 при помощи команды useradd, укажите необходимость создание домашнего каталога и shell /bin/bash:
+ sudo useradd -m -s /bin/bash user1
+
+Создайте пароль пользователю user1:
+passwd user1
+New password:
+Retype new password:
+passwd: password updated successfully
+
+4. Создайте пользователя user2 и user3 при помощи команды adduser:
+sudo adduser user2
+info: Adding user `user2' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user2' (1002) ...
+info: Adding new user `user2' (1002) with group `user2 (1002)' ...
+info: Creating home directory `/home/user2' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user2
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] Y
+info: Adding new user `user2' to supplemental / extra groups `users' ...
+info: Adding user `user2' to group `users' ...
+
+sudo adduser user3
+info: Adding user `user3' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user3' (1003) ...
+info: Adding new user `user3' (1003) with group `user3 (1003)' ...
+info: Creating home directory `/home/user3' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user3
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] Y
+info: Adding new user `user3' to supplemental / extra groups `users' ...
+info: Adding user `user3' to group `users' ...
+
+5. Для пользователя user3 смените shell на /usr/sbin/nologin:
+usermod -s /usr/sbin/nologin user3
+
+Выполните вход под этим пользователем при помощи утилиты su, сначала без дополнительных параметров, затем с явным указанием shell /bin/bash в параметрах su.
+
+Заходим без доп параметров:
+su - user3
+This account is currently not available.
+Нас не пускает.
+
+Заходим с явным указанием:
+su -s /bin/bash user3
+user3@eltex-practice2-pg1-v7:/root$
+Из-за смены shell на /usr/sbin/nologin мы сможем входить в user3 только с явным указанием shell.
+
+Выходим:
+exit
+
+6. Создайте новую группу и добавьте её для всех пользователей user* как дополнительную:
+groupadd user_s
+usermod -aG user_s user1
+usermod -aG user_s user2
+usermod -aG user_s user3
+
+Посмотрите список групп всех пользователей user*:
+ groups user1
+user1 : user1 user_s
+
+groups user2
+user2 : user2 users user_s
+
+ groups user3
+user3 : user3 users user_s
+
+7. Создайте каталог /opt/share и назначьте группу из предыдущего пункта его владельцем, установите на этот каталог бит SGID, права для группы rwx.
+chown :user_s /opt/share
+
+chmod 2770 /opt/share/
+
+ls -ld /opt/share
+drwxrws--- 2 root user_s 4096 Jul 11 04:10 /opt/share
+
+8. Для user1 задайте перманентно umask, снимающий право чтения для «прочих».
+root@eltex-practice2-pg1-v7:~# sudo su - user1
+user1@eltex-practice2-pg1-v7:~$ umask 004 /opt/share/
+
+9. Создайте каждым из пользователей новые файлы в каталоге /opt/share, удалите файлы созданные другими пользователями.
+user1@eltex-practice2-pg1-v7:~$ touch /opt/share/file_1.txt
+user1@eltex-practice2-pg1-v7:~$ exit
+logout
+
+root@eltex-practice2-pg1-v7:~# su - user2
+user2@eltex-practice2-pg1-v7:~$ touch /opt/share/file_2.txt
+user2@eltex-practice2-pg1-v7:~$ exit
+logout
+
+root@eltex-practice2-pg1-v7:~# su -s /bin/bash user3
+user3@eltex-practice2-pg1-v7:/root$ touch /opt/share/file_3.txt
+user3@eltex-practice2-pg1-v7:/root$ rm /opt/share/file_2.txt
+user3@eltex-practice2-pg1-v7:/root$ rm /opt/share/file_1.txt
+user3@eltex-practice2-pg1-v7:/root$ exit
+exit
+
+root@eltex-practice2-pg1-v7:~# su - user2
+user2@eltex-practice2-pg1-v7:~$ rm /opt/share/file_3.txt
+user2@eltex-practice2-pg1-v7:~$ exit
+logout 
+Получилось удалить файлы, которые были созданы другими пользователем, под различными пользователями.
+
+10. Повторите предыдущий пункт, предварительно установив sticky bit на каталоге /opt/share.
+root@eltex-practice2-pg1-v7:~# chmod +t /opt/share/
+root@eltex-practice2-pg1-v7:~# su - user1
+user1@eltex-practice2-pg1-v7:~$ touch /opt/share/file_1.txt
+user1@eltex-practice2-pg1-v7:~$ exit
+logout
+
+root@eltex-practice2-pg1-v7:~# su - user2
+user2@eltex-practice2-pg1-v7:~$ touch /opt/share/file_2.txt
+user2@eltex-practice2-pg1-v7:~$ exit
+logout
+
+root@eltex-practice2-pg1-v7:~# su -s /bin/bash user3
+user3@eltex-practice2-pg1-v7:~$ touch /opt/share/file_3.txt
+user3@eltex-practice2-pg1-v7:/root$ rm /opt/share/file_2.txt
+rm: cannot remove '/opt/share/file_2.txt': Operation not permitted
+user3@eltex-practice2-pg1-v7:~$ exit
+logout
+Не получилось удалить файлы другого пользователя, потому что был установлен sticky bit. Этот флаг запрещает менять файлы других пользователей.
+
+11. Для всех пользователей user* задайте время действия пароля – 10 дней.
+chage -M 10 user1
+chage -M 10 user2
+chage -M 10 user3
+
+12. Отредактируйте файл /etc/motd, вписав туда свое имя и фамилию.
+vi /etc/motd
+Фаламеева Анастасия
+
+13. Создайте копию содержимого каталога /etc в каталог /root/etc_backuр.
+rsync -av /etc/ /root/etc_backup/
+sending incremental file list
+created directory /root/etc_backup
+
+14. Заархивируйте содержимое каталога /root/etc_backup архиватором tar, используйте алгоритмы сжатия gzip, bzip2, 7zip.
+tar -czvf etc_backup.tar.gz /root/etc_backup/
+tar -cjvf etc_backup.tar.bz2 /root/etc_backup/
+tar -cJvf etc_backup.tar.xz /root/etc_backup/
+
+Сравните размеры полученных файлов:
+ls -lh etc_backup.tar.*
+-rw-r--r-- 1 root root    0 Jul 11 08:00 etc_backup.tar.bz2
+-rw-r--r-- 1 root root 582K Jul 11 08:00 etc_backup.tar.gz
+-rw-r--r-- 1 root root 471K Jul 11 08:02 etc_backup.tar.xz
+
+15.Отредактируйте файл /etc/motd, вписав туда текущую дату и время, синхронизируйте каталог /root/etc_backup с каталогом /etc при помощи rsync, добавьте файл motd в архив, сжатый gzip.
+rsync -av /etc/ /root/etc_backup/
+
+tar -rvf /root/etc_backup.tar etc_backup/
+tar -rvf /root/etc_backup.tar /etc/motd
+gzip -f /root/etc_backup.tar
+
+16. Распакуйте архивы etc_backup, упакованные gzip и 7zip в каталоги /root/etc_backup_gzip и /root/etc_backup_7zip.
+tar -xvf etc_backup.tar.gz -C /root/etc_backup_gzip
+tar -xvf etc_backup.tar.7z -C /root/etc_backup_7zip

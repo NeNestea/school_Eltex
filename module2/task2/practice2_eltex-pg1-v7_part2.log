@@ -1,0 +1,141 @@
+1. Найдите все записи из лога загрузки, доступного через команду journalctl с опцией -b в первые 20 секунд с момента загрузки, начало загрузки определить автоматически.
+journal -b --since today --until "+20s"
+
+2.Используя awk найдите все источники и их сообщения в файле auth.log (найдите его find), в названии источника удалите информацию об идентификаторе процесса при помощи sed, полученный результат отсортируйте по названию источника.
+find / -name auth.log
+/var/log/auth.log
+
+awk '{print $6, substr($0, index($0,$7))}' /var/log/auth.log | sed 's/\[[0-9]*\]//' | sort
+399 of user root.
+401 of user root.
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+closed for user root
+for root from 172.16.8.4 port 38674 ssh2: RSA SHA256:2A6P7wzgsD2+uYfon6YTKMkj4tfQmhP930mqvtdxp0I
+for root from 172.16.8.4 port 52054 ssh2: RSA SHA256:2A6P7wzgsD2+uYfon6YTKMkj4tfQmhP930mqvtdxp0I
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+opened for user root(uid=0) by root(uid=0)
+
+3. Для результата из предыдущего пункта найдите количество повторений для каждого источника и выведите их в виде списка «число_повторений источник», результат отсортируйте по убыванию количества повторений
+ awk '{print $6}' /var/log/auth.log | sed 's/\[[0-9]*\]//' | sort | uniq -c | sort -rn
+     66 opened
+     61 closed
+      4 for
+      1 414
+      1 410
+      1 401
+      1 399
+
+4. В файле /etc/passwd найдите всех пользователей в системе, у которых установлен shell /usr/sbin/nologin и выведите их в виде списка: «UID, username, список его групп», отсортированный в обратном порядке по UID, cписок групп используйте из файла /etc/group.
