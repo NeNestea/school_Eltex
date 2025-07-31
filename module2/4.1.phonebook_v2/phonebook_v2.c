@@ -1,39 +1,29 @@
 #include "phonebook_v2.h"
 
-int list_length(Node *head) {
-    int count = 0;
-    while (head) {
-        count++;
-        head = head->head;
-    }
-    return count;
+// получение данных сонтакта от пользователя
+phone_book get_contact_input() {
+  phone_book contact;
+  printf("Введите имя: ");
+  scanf("%39s", contact.first_name);
+  printf("Введите фамилию: ");
+  scanf("%39s", contact.last_name);
+  printf("Введите номер телефона: ");
+  scanf("%39s", contact.phone_number);
+  printf("Введите ник в Telegram, если есть: ");
+  scanf("%39s", contact.tg_link);
+
+  return contact;
 }
 
-Node *get_node_by_index(Node *head, int index) {
-    int i = 0;
-    while (head && i < index) {
-        head = head->head;
-        i++;
-    }
-    return head;
-}
-
-void add_contact(Node **head) { // функция добавления контакта
+void add_contact(Node **head,
+                 phone_book contact) { // функция добавления контакта
   Node *new_node = malloc(sizeof(Node));
   if (!new_node) {
     printf("Ошибка выделения памяти\n");
     exit(1);
   }
 
-  printf("Введите имя: ");
-  scanf("%39s", new_node->data.first_name);
-  printf("Введите фамилию: ");
-  scanf("%39s", new_node->data.last_name);
-  printf("Введите номер телефона: ");
-  scanf("%39s", new_node->data.phone_number);
-  printf("Введите ник в Telegram, если есть: ");
-  scanf("%39s", new_node->data.tg_link);
-
+  new_node->data = contact;
   new_node->tail = new_node->head = NULL;
 
   if (*head == NULL) {
@@ -53,7 +43,7 @@ void add_contact(Node **head) { // функция добавления конт�
   } else if (curr == NULL) {
     Node *tail = *head;
     while (tail->head) {
-        tail = tail->head;
+      tail = tail->head;
     }
     tail->head = new_node;
     new_node->tail = tail;
@@ -65,7 +55,7 @@ void add_contact(Node **head) { // функция добавления конт�
   }
 }
 
-void edit_contact(Node **head, int index) { // редактирование контакта
+void edit_contact(Node **head, int index, int field, const char *new_value) {
   int length = list_length(*head);
   if (index < 0 || index >= length) {
     printf("Неверный индекс!\n");
@@ -74,70 +64,28 @@ void edit_contact(Node **head, int index) { // редактирование ко
 
   Node *edit = get_node_by_index(*head, index);
 
-  printf("\n\tТекущий контакт\t\n");
-  printf("1. Имя: %s\n", edit->data.first_name);
-  printf("2. Фамилия: %s\n", edit->data.last_name);
-  printf("3. Номер телефона: %s\n", edit->data.phone_number);
-  printf("4. Telegram: %s\n", edit->data.tg_link);
-
-  int choice;
-  printf("Что вы хотите изменить? (0 - отмена): ");
-  scanf("%d", &choice);
-
-  if (choice == 0) {
-    printf("Выход из режима редактирования.\n\n");
-    return;
-  }
-
-  char new_value[MAX_LEN];
-  switch (choice) {
+  switch (field) {
   case 1:
-    printf("Введите новое имя: ");
-    scanf("%39s", new_value);
-    strcpy(edit->data.first_name, new_value);
+    strncpy(edit->data.first_name, new_value,
+            sizeof(edit->data.first_name) - 1);
+    edit->data.first_name[sizeof(edit->data.first_name) - 1] = '\0';
     break;
   case 2:
-    printf("Введите новую фамилию: ");
-    scanf("%39s", new_value);
-    strcpy(edit->data.first_name, new_value);
-
-    {
-        phone_book temp = edit->data;
-        if (edit->tail) {
-            edit->tail->head = edit->tail;
-        } else {
-            *head = edit->head;
-        }
-
-        if (edit->head) {
-            edit->head->tail = edit->tail;
-        }
-        free(edit);
-
-        Node *dummy = NULL;
-        add_contact(&dummy);
-
-        Node *new_node = malloc(sizeof(Node));
-        new_node->data = temp;
-        new_node->tail = new_node->head = NULL;
-        add_contact(&(*head));
-        
-        return;
-    }
+    strncpy(edit->data.last_name, new_value, sizeof(edit->data.last_name) - 1);
+    edit->data.last_name[sizeof(edit->data.last_name) - 1] = '\0';
     break;
   case 3:
-    printf("Введите номер телефона: ");
-    scanf("%39s", new_value);
-    strcpy(edit->data.phone_number, new_value);
+    strncpy(edit->data.phone_number, new_value,
+            sizeof(edit->data.phone_number) - 1);
+    edit->data.phone_number[sizeof(edit->data.phone_number) - 1] = '\0';
     break;
   case 4:
-    printf("Введите Telegram: ");
-    scanf("%39s", new_value);
-    strcpy(edit->data.tg_link, new_value);
+    strncpy(edit->data.tg_link, new_value, sizeof(edit->data.tg_link) - 1);
+    edit->data.tg_link[sizeof(edit->data.tg_link) - 1] = '\0';
     break;
-    default:
-        printf("Неверный выбор!\n");
-        return;
+  default:
+    printf("Неверный выбор!\n");
+    return;
   }
 
   printf("\nКонтакт успешно обновлён!\n\n");
@@ -145,7 +93,7 @@ void edit_contact(Node **head, int index) { // редактирование ко
 
 void delete_contact(Node **head, int index) { // удаляем контакт
   int length = list_length(*head);
-  if (index < 0 ||  index >= length) {
+  if (index < 0 || index >= length) {
     printf("Неверный индекс!\n");
     return;
   }
@@ -183,13 +131,31 @@ void print_contact(Node *head) { // вывод контактов
   }
 }
 
+int list_length(Node *head) {
+  int count = 0;
+  while (head) {
+    count++;
+    head = head->head;
+  }
+  return count;
+}
+
+Node *get_node_by_index(Node *head, int index) {
+  int i = 0;
+  while (head && i < index) {
+    head = head->head;
+    i++;
+  }
+  return head;
+}
+
 void free_list(Node *head) {
-    Node *tmp;
-    while (head) {
-        tmp = head;
-        head = head->head;
-        free(tmp);
-    }
+  Node *tmp;
+  while (head) {
+    tmp = head;
+    head = head->head;
+    free(tmp);
+  }
 }
 
 void menu() { // функция вывода меню

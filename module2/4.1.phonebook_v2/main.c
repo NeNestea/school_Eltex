@@ -12,11 +12,13 @@ int main() {
     case 1: // вывод списка контактов
       print_contact(head);
       break;
-    case 2: // добавление нового контакта
-      add_contact(&head);
+    case 2: { // добавление нового контакта
+      phone_book contact = get_contact_input();
+      add_contact(&head, contact);
       break;
+    }
     case 3: { // редактирование контакта
-        int len = list_length(head);
+      int len = list_length(head);
       if (len == 0) {
         printf("Контактов нет!\n");
         break;
@@ -25,11 +27,25 @@ int main() {
 
       printf("Выберите номер контакта для редактирования (1-%d): ", len);
       scanf("%d", &index);
-      edit_contact(&head, index - 1);
+
+      printf("\nВыберите поле для редактирования контакта: \n");
+      printf("1. Имя\n2. Фамилия\n3. Телефон\n4. Телеграм\n0. Отмена\nВаш "
+             "выбор: ");
+      int field;
+      scanf("%d", &field);
+      if (field == 0) {
+        printf("Отмена\n");
+        break;
+      }
+
+      char new_value[MAX_LEN];
+      printf("Введите новое значение: ");
+      scanf("%39s", new_value);
+      edit_contact(&head, index - 1, field, new_value);
       break;
     }
     case 4: { // удаление контакта
-        int len = list_length(head);
+      int len = list_length(head);
       if (len == 0) {
         printf("Контактов нет!\n");
         break;
@@ -52,5 +68,3 @@ int main() {
   free(head);
   return 0;
 }
-
-
